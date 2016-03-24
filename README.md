@@ -1,4 +1,4 @@
-# mat-mitsuba
+# mMitusba
 Matlab tools for constructing and writing Mitsuba scene files.
 
 We want to auto-generate [Mitsuba](https://www.mitsuba-renderer.org/) scene files from Matlab.  We start with an object-oriented Matlab representation of the whole scene.  We can identify objects in the the scene by id, and add/find/update/remove them while working.  When done working, we can write out a Mitsuba scene XML file based on the objects.
@@ -10,7 +10,7 @@ To get started, clone this repository and add it to your Matlab path.
 
 
 # TODO: update the rest
-The rest of this document was copied from our mPbrt documentation.  BSH is planning to keep the outline the same, but update the content for mat-mitsuba...as soon as he writes it!
+The rest of this document was copied from our mPbrt documentation.  BSH is planning to keep the outline the same, but update the content for mMitusba...as soon as he writes it!
 
 See the example script at [examples/exampleOfAPbrtFile.m](https://github.com/RenderToolbox3/mPbrt/blob/master/examples/exampleOfAPbrtFile.m).  You should be able to run this script right away and produce a PBRT scene file like [this one](https://github.com/RenderToolbox3/mPbrt/blob/master/examples/exampleOfAPbrtFile.pbrt).
 
