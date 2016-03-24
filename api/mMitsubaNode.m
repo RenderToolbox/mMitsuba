@@ -1,0 +1,120 @@
+classdef mMitsubaNode < handle
+    % Common interface and utiltiies for things that print themselves to a Mitsuba file.
+    
+    properties
+        % Name or id used to identify this node.
+        id = '';
+        
+        % Mitsuba plugin or property value type.
+        type = '';
+        
+        % Nested elements or properties.
+        nested = {};
+        
+        % Mitsuba version to target.
+        version = '0.5.0';
+    end
+    
+    methods (Abstract)
+        % Convert this object and nested objects to a struct.
+        %   This object must convert its self and any nested to a struct,
+        %   suitable for dumping to XML via the struct2xml() utility:
+        %     http://www.mathworks.com/matlabcentral/fileexchange/28639-struct2xml
+        s = toStruct(self)
+    end
+    
+    methods
+        function xml = printToFile(self, outputFile)
+            % Write this object and nested objects to a Mitsuba XML file.
+            %   If outputFile is omitted, returns a string of xml.
+            
+            % pack up scene data in a top-level document and root node
+            scene.Attributes.version = self.version;
+            scene = self.appendEach(scene, self.nested);
+            document.(self.type) = scene;
+            
+            if nargin > 1
+                struct2xml(document, outputFile);
+                xml = [];
+            else
+                xml = struct2xml(document);
+            end
+        end
+        
+        function isGivenNode = nodePosition(self, node)
+            % Check if the given node is nested in this node.
+            %   Returns a logical array the same size as self.nested, true
+            %   where the given node appears in self.nested, if at all.
+            
+            % no trick, just compare against each nested object
+            nNested = numel(self.nested);
+            isGivenNode = false(1, nNested);
+            for nn = 1:nNested
+                isGivenNode(nn) = node == self.nested{nn};
+            end
+        end
+        
+        function index = prepend(self, node)
+            % Prepend a node nested under this node.
+            %   If the node is already nested in this node, it will be
+            %   moved to the front.  Returns the index where the new node
+            %   was appended, which will always be 1, or [] if there was an
+            %   error.
+            
+            if ~isa(node, 'mMitsubaNode')
+                index = [];
+                return;
+            end
+            
+            index = 1;
+            isGivenNode = self.nodePosition(node);
+            self.nested = cat(2, {node}, self.nested(~isGivenNode));
+        end
+        
+        function index = append(self, node)
+            % Append a node nested under this node.
+            %   If the node is already nested in this node, it will be
+            %   moved to the back.  Returns the index where the new node
+            %   was appended, or [] if there was an error.
+            
+            if ~isa(node, 'mMitsubaNode')
+                index = [];
+                return;
+            end
+            
+            isGivenNode = self.nodePosition(node);
+            self.nested = cat(2, self.nested(~isGivenNode), {node});
+            index = numel(self.nested);
+        end
+        
+    end
+    
+    methods (Static)
+        function s = appendToField(s, fieldName, value)
+            % Append the given value to a field of the given struct.
+            %   Appends value to the fieldName field of the given struct s.
+            %   If s doesn't already have such a field, it is initialized
+            %   as a cell array.  In all cases, the value is appended to
+            %   the cell array.
+            
+            if isfield(s, fieldName)
+                s.(fieldName) = cat(2, s.(fieldName), {value});
+            else
+                s.(fieldName) = {value};
+            end
+        end
+        
+        function s = appendEach(s, nodes)
+            % Append each of the given nodes to the given struct.
+            %   Appends each mMitsubaNode contained in the given nodes
+            %   cell array to an appropriate field of the given struct s.
+            %   The field names will be based on the type property of each
+            %   node.  The field values will be based on the toStruct()
+            %   value of each node.
+            for nn = 1:numel(nodes)
+                node = nodes{nn};
+                s = mMitsubaNode.appendToField(s, node.type, node.toStruct());
+            end
+        end
+    end
+end
