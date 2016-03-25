@@ -104,51 +104,51 @@ This produces the following XML in the output file:
 ```
 
 ### Add, Find, and Delete from a Scene
-All your Elements and Containers go in a Scene.  The scene has an "overall" part for things that come before the `WorldBegin` line, like the camera.  The scene also has a "world" part for everything else, inluding shapes, light sources, etc.
+All Elements and Properties go in a top-level `scene` Element.  You can search the Scene (or any Element or Property) for existing nested Elements and Properties.  You can also remove find-and-remove Elements and Properties from the scene.  In one programmer's humble opinion, these abilities make mMitsuba more fun than a plain Mitsuba XML file!
 
-The Scene does more than organize you objects.  You can add objects to the Scene, search the Scene for existing objects, and remove objects from the Scene.  In one programmer's humble opinion, these abilities make mPath more fun than a plain PBRT text file!
-
-Here's an example that adds two elements to a scene.
+Here's an example that adds several elements and properties to a scene:
 ```
-scene = MPbrtScene();
+scene = MMitsubaElement.scene();
 
-% add the camera at the "overall" level
-scene.overall.append(MPbrtElement('Camera', 'type', 'perspective'));
+integrator = MMitsubaElement('integrator', 'integrator', 'path');
+integrator.append(MMitsubaProperty.withValue('maxDepth', 'integer', 8));
+scene.append(integrator);
 
-% add a light to the "world", nested in an Attribute section
-lightAttrib = MPbrtContainer('Attribute');
-scene.world.append(lightAttrib);
-lightAttrib.append(MPbrtElement('LightSource', 'type', 'distant', 'name', 'the-light'));
-```
-
-We can find the camera and update it.
-```
-camera = scene.overall.find('Camera');
-camera.setParameter('fov', 'float', 30);
+sensor = MMitsubaElement('camera', 'sensor', 'perspective');
+sensor.append(MMitsubaProperty.withNested('toWorld', 'transform', 'lookat', ...
+    'origin', 0.1 * [-1 1 4], ...
+    'target', [0 .1 0], ...
+    'up', [0 1 0]));
+sensor.append(MMitsubaProperty.withValue('fov', 'float', 45));
+scene.append(sensor);
 ```
 
-We can find the light and remove it altogether.
+We can find the integrator by `id` and change the type of plugin that it will load:
 ```
-removedlight = scene.world.find('LightSource', 'name', 'the-light', 'remove', true);
-removedLight = 
-  MPbrtElement with properties:
-
-          value: []
-      valueType: ''
-           type: 'distant'
-     parameters: []
-           name: 'the-light'
-     identifier: 'LightSource'
-        comment: ''
-         indent: '  '
-    floatFormat: '%f'
-      intFormat: '%d'
-     scanFormat: '%f'
+integrator = scene.find('integrator');
+integrator.pluginType = 'bdpt';
 ```
 
-Once removed, we can no longer find the light.
+We can find the camera's `fov` Property and remove it altogether:
 ```
-shouldBeEmpty = scene.world.find('LightSource', 'name', 'the-light');
+removedFov = scene.find('fov', ...
+    'type', 'float', ...
+    'remove', true);
+
+removedFov = 
+  MMitsubaProperty with properties:
+
+       data: [1x1 struct]
+         id: 'fov'
+       type: 'float'
+     nested: {}
+    version: '0.5.0'
+```
+
+Once removed, we can no longer find the fov.
+```
+shouldBeEmpty = scene.find('fov', 'type', 'float');
+
 shouldBeEmpty =
      []
 ```
