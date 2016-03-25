@@ -15,7 +15,7 @@ These examples reproduce scenes from section 6 of the [Mitsuba documentation](ht
 # The API
 The mMitsuba API is based on Elements and Properties.  These are written as Matlab [Classes](http://www.mathworks.com/help/matlab/object-oriented-programming.html).
 
-In general, you create objects and specify their names, types, values, etc.  Then the objects take care of writing well-formatted Mitsuba syntax to an XML file.
+In general, you create objects and specify their ids, types, values, etc.  Then the objects take care of writing well-formatted Mitsuba syntax to an XML file.
 
 ### Elements
 Elements are things like shapes, light sources, the camera, etc.  In terms of scene file syntax, Elements are written as [XML elements](http://www.w3schools.com/xml/xml_elements.asp).  In terms of Mitsuba, each Element invokes a Mitsuba "plugin" which is a chunk of the renderer.
