@@ -51,35 +51,31 @@ This produces the following XML in the output file:
 </shape>
 ```
 
-### Containers
-Containers are holders for nested elements.  For example the stuff that goes between `WorldBegin` and `WorldEnd` goes in a "World" container.  Likewise, stuff you want to put in an `AttributeBegin`/`AttributeEnd` section would go in an "Attribute" container, and so on for other `Begin`/`End` sections.
+### Properties
+Another way to make elements more interesting is to given them Properties.  Properties are things like "width", "sampleCount", and "roughness".  In terms of scene file syntax, Properties are written as [XML elements](http://www.w3schools.com/xml/xml_elements.asp), just like Elements.  In terms of Mitsuba, properties configure plugins that have already been loaded.
 
-Here is an example of creating an `AttributeBegin`/`AttributeEnd` section that holds a coordinate transformation and a light source:
+Here is an example of adding some Properties to Elements.  These would refine the example above by setting the `radius` of the sphere shape and the `roughness` of the surface reflectance model. 
 ```
-lightAttrib = MPbrtContainer('Attribute');
+shape = MMitsubaElement('my-shape', 'shape', 'sphere');
+shape.append(MMitsubaProperty.withValue('radius', 'float', 10));
 
-coordXForm = MPbrtElement.transformation('CoordSysTransform', 'camera');
-lightAttrib.append(coordXForm);
+bsdf = MMitsubaElement('my-material', 'bsdf', 'roughdielectric');
+bsdf.append(MMitsubaProperty.withValue('alpha', 'float', 0.01));
 
-lightSource = MPbrtElement('LightSource', 'type', 'distant');
-lightSource.setParameter('from', 'point', [0 0 0]);
-lightSource.setParameter('to', 'point', [0 0 1]);
-lightSource.setParameter('L', 'rgb', [3 3 3]);
-lightAttrib.append(lightSource);
+shape.append(bsdf);
 ```
 
-This produces the following PBRT syntax in the output file:
+This produces the following XML in the output file:
 ```
-AttributeBegin
-  CoordSysTransform "camera"   
-  LightSource "distant"   
-    "point from" [0 0 0] 
-    "point to" [0 0 1] 
-    "rgb L" [3 3 3] 
-AttributeEnd
+<shape id="my-shape" type="sphere">
+  <float name="radius" value="10"/>
+  <bsdf id="my-material" type="roughdielectric">
+    <float name="alpha" value="0.01"/>
+  </bsdf>
+</shape>
 ```
 
-### Comments
+### Transformations
 Elements and Containers have the optional properties `name` and `comment`.  When these properties are provided, the objects will print extra comment lines.
 
 Here is an example of adding a `name` and `comment` to a coordinate transform:
