@@ -8,13 +8,9 @@ For now we can only go from Matlab to Mitsuba.  We can't parse existing Mitsuba 
 # Get Started
 To get started, clone this repository and add it to your Matlab path.
 
+See the example scripts at [examples/simpleScene.m](https://github.com/RenderToolbox3/mMitsuba/blob/master/examples/simpleScene.m) and [examples/moreComplexExample.m](https://github.com/RenderToolbox3/mMitsuba/blob/master/examples/moreComplexExample.m).  You should be able to run these right away and produce Mitsuba scene file like [this simple one](https://github.com/RenderToolbox3/mMitsuba/blob/master/examples/simpleScene.xml) and this [more compled one](https://github.com/RenderToolbox3/mMitsuba/blob/master/examples/moreComplexExample.xml).
 
-# TODO: update the rest
-The rest of this document was copied from our mPbrt documentation.  BSH is planning to keep the outline the same, but update the content for mMitusba...as soon as he writes it!
-
-See the example script at [examples/exampleOfAPbrtFile.m](https://github.com/RenderToolbox3/mPbrt/blob/master/examples/exampleOfAPbrtFile.m).  You should be able to run this script right away and produce a PBRT scene file like [this one](https://github.com/RenderToolbox3/mPbrt/blob/master/examples/exampleOfAPbrtFile.pbrt).
-
-The idea of this example script is to reproduce the "official" example scene file from the [pber-v2 file format documentation](http://www.pbrt.org/fileformat.html).
+These examples reproduces scenes from section 6 of the [Mitsuba documentation](https://www.mitsuba-renderer.org/docs.html) (version 0.5.0). 
 
 # The API
 The mPbrt API is based on a Scene which contains Elements and Containers.  These are written as Matlab [Classes](http://www.mathworks.com/help/matlab/object-oriented-programming.html).
