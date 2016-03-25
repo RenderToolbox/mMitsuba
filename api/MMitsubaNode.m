@@ -87,6 +87,58 @@ classdef MMitsubaNode < handle
             index = numel(self.nested);
         end
         
+        function existing = find(self, id, varargin)
+            % Find a node nested under this node.
+            %   existing = find(self, id) recursively searches this
+            %   node and nested nodes for a node that has the given
+            %   id.  The first node found is returned, if any.  If
+            %   no node was found, returns [].
+            %
+            %   find( ... 'type', type) restricts the search to nodes that
+            %   have the given id and type.
+            %
+            %   find( ... 'remove', remove) specifies whether to remove the
+            %   node that was found from its nesting node (true), or not
+            %   (false).  The default is false, don't remove the node.
+            
+            parser = inputParser();
+            parser.addRequired('id', @ischar);
+            parser.addParameter('type', '', @ischar);
+            parser.addParameter('remove', false, @islogical);
+            parser.parse(id, varargin{:});
+            id = parser.Results.id;
+            nodeType = parser.Results.type;
+            remove = parser.Results.remove;
+            
+            % is it this container?
+            if strcmp(self.id, id) && (isempty(nodeType) || strcmp(self.type, nodeType))
+                existing = self;
+                return;
+            end
+            
+            % depth-first search of nested nodes
+            for nn = 1:numel(self.nested)
+                node = self.nested{nn};
+                
+                % look for a direct child [and remove it]
+                if strcmp(node.id, id) && (isempty(nodeType) || strcmp(node.type, nodeType))
+                    existing = node;
+                    if remove
+                        self.nested(nn) = [];
+                    end
+                    return;
+                end
+                
+                % look for a deeper descendant
+                existing = node.find(id, varargin{:});
+                if ~isempty(existing)
+                    return;
+                end
+            end
+            
+            % never found a match
+            existing = [];
+        end
     end
     
     methods (Static)

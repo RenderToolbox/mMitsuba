@@ -8,13 +8,13 @@
 %   dragon.obj
 %   lightsource.serialzied
 %
-% To make our scene testable, we will substitute a dragon file that we do
-% have, included with this script:
-%   dragon/dragon_vrip_res4.ply
-% and we will make the light source a sphere instead of a serialized mesh.
-%
-% We will also make the camera "lookat" the dragon, instead of pointing off
-% into space.
+% To make our scene easy to test, we will make a few changes to the
+% original:
+%   - replace dragon.obj with a file included here: dragon/dragon_vrip_res4.ply
+%   - make the dragon more visible with roughplastic material instead of roughdielectric
+%   - replace lightsource.serialzied with a simple sphere shape
+%   - make the camera "lookat" the dragon instead of pointing at nothing
+%   - make the film smaller to speed up rendering
 % 
 % Here's what the original looks like:
 %
@@ -93,10 +93,12 @@ sensor.append(MMitsubaProperty.withValue('fov', 'float', 45));
 
 sampler = MMitsubaElement('sampler', 'sampler', 'independent');
 sampler.append(MMitsubaProperty.withValue('sampleCount', 'integer', 32));
+sensor.append(sampler);
 
 film = MMitsubaElement('film', 'film', 'hdrfilm');
-film.append(MMitsubaProperty.withValue('width', 'integer', 1920));
-film.append(MMitsubaProperty.withValue('height', 'integer', 1080));
+film.append(MMitsubaProperty.withValue('width', 'integer', 640));
+film.append(MMitsubaProperty.withValue('height', 'integer', 480));
+sensor.append(film);
 
 scene.append(sensor);
 
@@ -104,8 +106,9 @@ scene.append(sensor);
 dragon = MMitsubaElement('dragon', 'shape', 'ply');
 dragon.append(MMitsubaProperty.withValue('filename', 'string', 'dragon/dragon_vrip_res4.ply'));
 
-bsdf = MMitsubaElement('dragon-material', 'bsdf', 'roughdielectric');
+bsdf = MMitsubaElement('dragon-material', 'bsdf', 'roughplastic');
 bsdf.append(MMitsubaProperty.withValue('alpha', 'float', 0.01));
+dragon.append(bsdf);
 
 scene.append(dragon);
 
@@ -119,7 +122,7 @@ lightSource.append(MMitsubaProperty.withNested('toWorld', 'transform', 'translat
     'z', 1));
 
 emitter = MMitsubaElement('light-emitter', 'emitter', 'area');
-emitter.append(MMitsubaProperty.withValue('radiance', 'rgb', '100, 400, 100'));
+emitter.append(MMitsubaProperty.withValue('radiance', 'rgb', [100, 400, 100]));
 lightSource.append(emitter);
 
 scene.append(lightSource);

@@ -8,9 +8,19 @@
          <lookat origin="-0.1 0.1 0.4" target="0 0.1 0" up="0 1 0"/>
       </transform>
       <float name="fov" value="45"/>
+      <sampler id="sampler" type="independent">
+         <integer name="sampleCount" value="32"/>
+      </sampler>
+      <film id="film" type="hdrfilm">
+         <integer name="width" value="640"/>
+         <integer name="height" value="480"/>
+      </film>
    </sensor>
    <shape id="dragon" type="ply">
       <string name="filename" value="dragon/dragon_vrip_res4.ply"/>
+      <bsdf id="dragon-material" type="roughplastic">
+         <float name="alpha" value="0.01"/>
+      </bsdf>
    </shape>
    <shape id="light" type="sphere">
       <float name="radius" value="2"/>
@@ -18,7 +28,7 @@
          <translate x="5" y="-3" z="1"/>
       </transform>
       <emitter id="light-emitter" type="area">
-         <rgb name="radiance" value="100, 400, 100"/>
+         <rgb name="radiance" value="100 400 100"/>
       </emitter>
    </shape>
 </scene>
