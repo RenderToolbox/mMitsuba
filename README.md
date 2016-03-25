@@ -20,7 +20,7 @@ In general, you create objects and specify their names, types, values, etc.  The
 ### Elements
 Elements are things like shapes, light sources, the camera, etc.  In terms of scene file syntax, Elements are written as [XML elements](http://www.w3schools.com/xml/xml_elements.asp).  In terms of Mitsuba, each Element invokes a Mitsuba "plugin" which is a chunk of the renderer.
 
-Each Element requires a unique `id`, which lets us find it while were working, and lets elements in the scene file refer to each other.
+Each Element requires a unique `id`, which can be anything you want.  The `id` lets us find Elements while were working, and lets elements refer to each other.
 
 Each Element also requires a `type` and a `pluginType`, which tell Mitsuba how to use the Element, and which "plugin" to load into memory. 
 
@@ -53,6 +53,11 @@ This produces the following XML in the output file:
 
 ### Properties
 Another way to make elements more interesting is to given them Properties.  Properties are things like "width", "sampleCount", and "roughness".  In terms of scene file syntax, Properties are written as [XML elements](http://www.w3schools.com/xml/xml_elements.asp), just like Elements.  In terms of Mitsuba, properties configure plugins that have already been loaded.
+
+Each Property requires a `name`, which must be one of the named parameters expected by a Mitsuba plugin.
+
+Each Property also requires a `type`, which is the type of the Property's value, such as `integer` or `spectrum`.
+
 
 Here is an example of adding some Properties to Elements.  These would refine the example above by setting the `radius` of the sphere shape and the `roughness` of the surface reflectance model. 
 ```
