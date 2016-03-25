@@ -1,4 +1,4 @@
-% This is an example of how to build and write a Mitsuba scene with mMitsuba.
+% This is an example of how to build and write a Mitsuba scene with MMitsuba.
 %
 % This example recreates one of the "simple scene" example Mitsuba files
 % from section 6 of the Mitsuba pdf (verision 0.5.0).
@@ -18,11 +18,11 @@
 clear;
 clc;
 
-scene = mMitsubaElement.scene();
+scene = MMitsubaElement.scene();
 
 %% Add the shape.
-shape = mMitsubaElement('shape', 'shape', 'sphere');
-shape.append(mMitsubaProperty.withValue('radius', 'float', 10));
+shape = MMitsubaElement('shape', 'shape', 'sphere');
+shape.append(MMitsubaProperty.withValue('radius', 'float', 10));
 scene.append(shape);
 
 %% Print the scene to a file.

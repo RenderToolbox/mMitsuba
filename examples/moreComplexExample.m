@@ -1,4 +1,4 @@
-% This is an example of how to build and write a Mitsuba scene with mMitsuba.
+% This is an example of how to build and write a Mitsuba scene with MMitsuba.
 %
 % This example recreates the "more complex example" Mitsuba file
 % from section 6 of the Mitsuba pdf (verision 0.5.0).
@@ -75,51 +75,51 @@
 clear;
 clc;
 
-scene = mMitsubaElement.scene();
+scene = MMitsubaElement.scene();
 
 %% Add the integrator.
-integrator = mMitsubaElement('integrator', 'integrator', 'path');
-integrator.append(mMitsubaProperty.withValue('maxDepth', 'integer', 8));
+integrator = MMitsubaElement('integrator', 'integrator', 'path');
+integrator.append(MMitsubaProperty.withValue('maxDepth', 'integer', 8));
 scene.append(integrator);
 
 %% Add the camera, with nested sampler and film.
-sensor = mMitsubaElement('camera', 'sensor', 'perspective');
+sensor = MMitsubaElement('camera', 'sensor', 'perspective');
 
-sensor.append(mMitsubaProperty.withNested('toWorld', 'transform', 'lookat', ...
+sensor.append(MMitsubaProperty.withNested('toWorld', 'transform', 'lookat', ...
     'origin', 0.1 * [-1 1 4], ...
     'target', [0 .1 0], ...
     'up', [0 1 0]));
-sensor.append(mMitsubaProperty.withValue('fov', 'float', 45));
+sensor.append(MMitsubaProperty.withValue('fov', 'float', 45));
 
-sampler = mMitsubaElement('sampler', 'sampler', 'independent');
-sampler.append(mMitsubaProperty.withValue('sampleCount', 'integer', 32));
+sampler = MMitsubaElement('sampler', 'sampler', 'independent');
+sampler.append(MMitsubaProperty.withValue('sampleCount', 'integer', 32));
 
-film = mMitsubaElement('film', 'film', 'hdrfilm');
-film.append(mMitsubaProperty.withValue('width', 'integer', 1920));
-film.append(mMitsubaProperty.withValue('height', 'integer', 1080));
+film = MMitsubaElement('film', 'film', 'hdrfilm');
+film.append(MMitsubaProperty.withValue('width', 'integer', 1920));
+film.append(MMitsubaProperty.withValue('height', 'integer', 1080));
 
 scene.append(sensor);
 
 %% Add a reflective dragon shape.
-dragon = mMitsubaElement('dragon', 'shape', 'ply');
-dragon.append(mMitsubaProperty.withValue('filename', 'string', 'dragon/dragon_vrip_res4.ply'));
+dragon = MMitsubaElement('dragon', 'shape', 'ply');
+dragon.append(MMitsubaProperty.withValue('filename', 'string', 'dragon/dragon_vrip_res4.ply'));
 
-bsdf = mMitsubaElement('dragon-material', 'bsdf', 'roughdielectric');
-bsdf.append(mMitsubaProperty.withValue('alpha', 'float', 0.01));
+bsdf = MMitsubaElement('dragon-material', 'bsdf', 'roughdielectric');
+bsdf.append(MMitsubaProperty.withValue('alpha', 'float', 0.01));
 
 scene.append(dragon);
 
 %% Add a light-emitting shape.
-lightSource = mMitsubaElement('light', 'shape', 'sphere');
-lightSource.append(mMitsubaProperty.withValue('radius', 'float', 2));
+lightSource = MMitsubaElement('light', 'shape', 'sphere');
+lightSource.append(MMitsubaProperty.withValue('radius', 'float', 2));
 
-lightSource.append(mMitsubaProperty.withNested('toWorld', 'transform', 'translate', ...
+lightSource.append(MMitsubaProperty.withNested('toWorld', 'transform', 'translate', ...
     'x', 5, ...
     'y', -3, ...
     'z', 1));
 
-emitter = mMitsubaElement('light-emitter', 'emitter', 'area');
-emitter.append(mMitsubaProperty.withValue('radiance', 'rgb', '100, 400, 100'));
+emitter = MMitsubaElement('light-emitter', 'emitter', 'area');
+emitter.append(MMitsubaProperty.withValue('radiance', 'rgb', '100, 400, 100'));
 lightSource.append(emitter);
 
 scene.append(lightSource);

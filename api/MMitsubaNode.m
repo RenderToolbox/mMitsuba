@@ -1,4 +1,4 @@
-classdef mMitsubaNode < handle
+classdef MMitsubaNode < handle
     % Common interface and utiltiies for things that print themselves to a Mitsuba file.
     
     properties
@@ -61,7 +61,7 @@ classdef mMitsubaNode < handle
             %   was appended, which will always be 1, or [] if there was an
             %   error.
             
-            if ~isa(node, 'mMitsubaNode')
+            if ~isa(node, 'MMitsubaNode')
                 index = [];
                 return;
             end
@@ -77,7 +77,7 @@ classdef mMitsubaNode < handle
             %   moved to the back.  Returns the index where the new node
             %   was appended, or [] if there was an error.
             
-            if ~isa(node, 'mMitsubaNode')
+            if ~isa(node, 'MMitsubaNode')
                 index = [];
                 return;
             end
@@ -106,14 +106,14 @@ classdef mMitsubaNode < handle
         
         function s = appendEach(s, nodes)
             % Append each of the given nodes to the given struct.
-            %   Appends each mMitsubaNode contained in the given nodes
+            %   Appends each MMitsubaNode contained in the given nodes
             %   cell array to an appropriate field of the given struct s.
             %   The field names will be based on the type property of each
             %   node.  The field values will be based on the toStruct()
             %   value of each node.
             for nn = 1:numel(nodes)
                 node = nodes{nn};
-                s = mMitsubaNode.appendToField(s, node.type, node.toStruct());
+                s = MMitsubaNode.appendToField(s, node.type, node.toStruct());
             end
         end
     end

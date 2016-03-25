@@ -1,4 +1,4 @@
-classdef mMitsubaElement < mMitsubaNode
+classdef MMitsubaElement < MMitsubaNode
     % Data for a Mitsuba scene plugin.
     %   The idea here is to hold the data we need in order to print an XML
     %   element that specifies a Mitsuba scene object plugin.  In general,
@@ -11,7 +11,7 @@ classdef mMitsubaElement < mMitsubaNode
     %   <shape id="mySphere" type="sphere">
     %
     % We can extend this by nesting elements within each other, and by
-    % letting elements have nested properties (see mMitsubaProperty).  We
+    % letting elements have nested properties (see MMitsubaProperty).  We
     % can pack everything up in one big element called the "scene".  The
     % result is a functional Mitsuba scene file, like this:
     %	<scene  version="0.5.0">
@@ -26,7 +26,7 @@ classdef mMitsubaElement < mMitsubaNode
     end
     
     methods
-        function self = mMitsubaElement(id, type, pluginType)
+        function self = MMitsubaElement(id, type, pluginType)
             self.id = id;
             self.type = type;
             self.pluginType = pluginType;
@@ -45,7 +45,7 @@ classdef mMitsubaElement < mMitsubaNode
     methods (Static)
         function scene = scene()
             % Helper method to make the top-level scene element.
-            scene = mMitsubaElement('', 'scene', '');
+            scene = MMitsubaElement('', 'scene', '');
         end
     end
 end

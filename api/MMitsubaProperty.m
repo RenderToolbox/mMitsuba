@@ -1,4 +1,4 @@
-classdef mMitsubaProperty < mMitsubaNode
+classdef MMitsubaProperty < MMitsubaNode
     % Property configuration for a Mitsuba plugin.s
     %
     % The idea here is to hold a property configuration for a Mitsuba scene
@@ -19,7 +19,7 @@ classdef mMitsubaProperty < mMitsubaNode
     %       <rotate  y="1"  angle="45"/>
     %   </transform>
     %
-    % mMitsubaProperty can handle all of these cases by allowing nested
+    % MMitsubaProperty can handle all of these cases by allowing nested
     % properties and by allowing flexible name-value pairs where data can
     % be stored.  See static methods for utilities that handle common
     % cases.
@@ -31,7 +31,7 @@ classdef mMitsubaProperty < mMitsubaNode
     end
     
     methods
-        function self = mMitsubaProperty(name, type)
+        function self = MMitsubaProperty(name, type)
             self.id = name;
             self.type = type;
         end
@@ -71,7 +71,7 @@ classdef mMitsubaProperty < mMitsubaNode
     methods (Static)
         function p = withValue(name, type, value)
             % Build a typical name-type-value property.
-            p = mMitsubaProperty(name, type);
+            p = MMitsubaProperty(name, type);
             p.setData('value', value);
         end
         
@@ -89,7 +89,7 @@ classdef mMitsubaProperty < mMitsubaNode
             name = parser.Results.name;
             type = parser.Results.type;
             
-            p = mMitsubaProperty(name, type);
+            p = MMitsubaProperty(name, type);
             p.data = parser.Unmatched;
         end
         
@@ -109,8 +109,8 @@ classdef mMitsubaProperty < mMitsubaNode
             %       <translate x="5" y="-3" z="1"/>
             %     </transform>
             
-            p = mMitsubaProperty(name, type);
-            p.append(mMitsubaProperty.withData('', nestedType, varargin{:}));
+            p = MMitsubaProperty(name, type);
+            p.append(MMitsubaProperty.withData('', nestedType, varargin{:}));
         end
     end
 end
