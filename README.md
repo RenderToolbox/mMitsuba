@@ -1,4 +1,4 @@
-# mMitusba
+# mMitsuba
 Matlab tools for constructing and writing Mitsuba scene files.
 
 We want to auto-generate [Mitsuba](https://www.mitsuba-renderer.org/) scene files from Matlab.  We start with an object-oriented Matlab representation of the whole scene.  We can identify objects in the the scene by id, and add/find/update/remove them while working.  When done working, we can write out a Mitsuba scene XML file based on the objects.
@@ -8,136 +8,147 @@ For now we can only go from Matlab to Mitsuba.  We can't parse existing Mitsuba 
 # Get Started
 To get started, clone this repository and add it to your Matlab path.
 
+See the example scripts at [examples/simpleScene.m](https://github.com/RenderToolbox3/mMitsuba/blob/master/examples/simpleScene.m) and [examples/moreComplexExample.m](https://github.com/RenderToolbox3/mMitsuba/blob/master/examples/moreComplexExample.m).  You should be able to run these right away and produce Mitsuba scene file like [this simple one](https://github.com/RenderToolbox3/mMitsuba/blob/master/examples/simpleScene.xml) and this [more compled one](https://github.com/RenderToolbox3/mMitsuba/blob/master/examples/moreComplexExample.xml).
 
-# TODO: update the rest
-The rest of this document was copied from our mPbrt documentation.  BSH is planning to keep the outline the same, but update the content for mMitusba...as soon as he writes it!
-
-See the example script at [examples/exampleOfAPbrtFile.m](https://github.com/RenderToolbox3/mPbrt/blob/master/examples/exampleOfAPbrtFile.m).  You should be able to run this script right away and produce a PBRT scene file like [this one](https://github.com/RenderToolbox3/mPbrt/blob/master/examples/exampleOfAPbrtFile.pbrt).
-
-The idea of this example script is to reproduce the "official" example scene file from the [pber-v2 file format documentation](http://www.pbrt.org/fileformat.html).
+These examples reproduces scenes from section 6 of the [Mitsuba documentation](https://www.mitsuba-renderer.org/docs.html) (version 0.5.0). 
 
 # The API
-The mPbrt API is based on a Scene which contains Elements and Containers.  These are written as Matlab [Classes](http://www.mathworks.com/help/matlab/object-oriented-programming.html).
+The mMitsuba API is based on a Elements and Properties.  These are written as Matlab [Classes](http://www.mathworks.com/help/matlab/object-oriented-programming.html).
 
-In general, you create objects and specify their names, types, values, etc.  Then the objects take care of writing well-formatted PBRT syntax to a text file.
+In general, you create objects and specify their names, types, values, etc.  Then the objects take care of writing well-formatted Mitsuba syntax to an XML file.
 
 ### Elements
-Elements are things like shapes, light sources, the camera, etc.  Each one has a declaration line followed by zero or more parameter lines.
+Elements are things like shapes, light sources, the camera, etc.  In terms of scene file syntax, Elements are written as [XML elements](http://www.w3schools.com/xml/xml_elements.asp).  In terms of Mitsuba, each Element invokes a Mitsuba "plugin" which is a chunk of the renderer.
 
-Here is an example of creating a `LightSource` element:
-```
-lightSource = MPbrtElement('LightSource', 'type', 'distant');
-lightSource.setParameter('from', 'point', [0 0 0]);
-lightSource.setParameter('to', 'point', [0 0 1]);
-lightSource.setParameter('L', 'rgb', [3 3 3]);
-```
+Each Element requires a unique `id`, which can be anything you want.  The `id` lets us find Elements while were working, and lets elements refer to each other.
 
-This produces the following PBRT syntax in the output file:
+Each Element also requires a `type` and a `pluginType`, which tell Mitsuba how to use the Element, and which "plugin" to load into memory. 
+
+Here is an example of creating a `shape` element:
 ```
-LightSource "distant"   
-  "point from" [0 0 0] 
-  "point to" [0 0 1] 
-  "rgb L" [3 3 3] 
+shape = MMitsubaElement('my-shape', 'shape', 'sphere');
 ```
 
-You can write generic Elements as in this example.  There are also utility methods for creating some common or complex elements.  These include:
-  * [`MPbrtElement.comment()`](https://github.com/RenderToolbox3/mPbrt/blob/master/api/MPbrtElement.m#L128)
-  * [`MPbrtElement.transformation()`](https://github.com/RenderToolbox3/mPbrt/blob/master/api/MPbrtElement.m#L133)
-  * [`MPbrtElement.texture()`](https://github.com/RenderToolbox3/mPbrt/blob/master/api/MPbrtElement.m#L148)
-  * [`MPbrtElement.makeNamedMaterial()`](https://github.com/RenderToolbox3/mPbrt/blob/master/api/MPbrtElement.m#L157)
-  * [`MPbrtElement.namedMaterial()`](https://github.com/RenderToolbox3/mPbrt/blob/master/api/MPbrtElement.m#L165)
-
-### Containers
-Containers are holders for nested elements.  For example the stuff that goes between `WorldBegin` and `WorldEnd` goes in a "World" container.  Likewise, stuff you want to put in an `AttributeBegin`/`AttributeEnd` section would go in an "Attribute" container, and so on for other `Begin`/`End` sections.
-
-Here is an example of creating an `AttributeBegin`/`AttributeEnd` section that holds a coordinate transformation and a light source:
+This produces the following XML in the output file:
 ```
-lightAttrib = MPbrtContainer('Attribute');
-
-coordXForm = MPbrtElement.transformation('CoordSysTransform', 'camera');
-lightAttrib.append(coordXForm);
-
-lightSource = MPbrtElement('LightSource', 'type', 'distant');
-lightSource.setParameter('from', 'point', [0 0 0]);
-lightSource.setParameter('to', 'point', [0 0 1]);
-lightSource.setParameter('L', 'rgb', [3 3 3]);
-lightAttrib.append(lightSource);
+<shape id="my-shape" type="sphere" />
 ```
 
-This produces the following PBRT syntax in the output file:
+### Nesting Elements
+By itself, the sphere shape above would not be very useful.  But Elements can be nested to make them more interesting.
+
+Here is an example of nesting a reflectance function within a shape.  This would give the shape an interesting surface reflectance and appearance:
 ```
-AttributeBegin
-  CoordSysTransform "camera"   
-  LightSource "distant"   
-    "point from" [0 0 0] 
-    "point to" [0 0 1] 
-    "rgb L" [3 3 3] 
-AttributeEnd
+shape = MMitsubaElement('my-shape', 'shape', 'sphere');
+bsdf = MMitsubaElement('my-material', 'bsdf', 'roughdielectric');
+shape.append(bsdf);
 ```
 
-### Comments
-Elements and Containers have the optional properties `name` and `comment`.  When these properties are provided, the objects will print extra comment lines.
-
-Here is an example of adding a `name` and `comment` to a coordinate transform:
+This produces the following XML in the output file:
 ```
-coordXForm = MPbrtElement.transformation('CoordSysTransform', 'camera', ...
-    'name', 'camera-transform', ...
-    'comment', 'Move the coordinate system to match the camera.');
+<shape id="my-shape" type="sphere">
+  <bsdf id="my-material" type="roughdielectric" />
+</shape>
 ```
 
-This produces the following PBRT syntax in the output file:
+### Properties
+Another way to make elements more interesting is to given them Properties.  Properties are things like "width", "sampleCount", and "roughness".  In terms of scene file syntax, Properties are written as [XML elements](http://www.w3schools.com/xml/xml_elements.asp), just like Elements.  In terms of Mitsuba, properties configure plugins that have already been loaded.
+
+Each Property requires a `name`, which must be one of the named parameters expected by a Mitsuba plugin.
+
+Each Property also requires a `type`, which is the type of the Property's value, such as `integer` or `spectrum`.
+
+
+Here is an example of adding some Properties to Elements.  These would refine the example above by setting the `radius` of the sphere shape and the `roughness` of the surface reflectance model. 
 ```
-# camera-transform
-# Move the coordinate system to match the camera.
-CoordSysTransform "camera"   
+shape = MMitsubaElement('my-shape', 'shape', 'sphere');
+shape.append(MMitsubaProperty.withValue('radius', 'float', 10));
+
+bsdf = MMitsubaElement('my-material', 'bsdf', 'roughdielectric');
+bsdf.append(MMitsubaProperty.withValue('alpha', 'float', 0.01));
+
+shape.append(bsdf);
+```
+
+This produces the following XML in the output file:
+```
+<shape id="my-shape" type="sphere">
+  <float name="radius" value="10"/>
+  <bsdf id="my-material" type="roughdielectric">
+    <float name="alpha" value="0.01"/>
+  </bsdf>
+</shape>
+```
+
+### Transformations
+Some elements like shapes, lights, and the camera, can move about the scene as specified by spatial transformations.  We can specify transformations using Properties.
+
+The trick is that transformations can have multiple nested parts, so we have a utility method for making nested Properties: [MMitsubaProperty.withNested()](https://github.com/RenderToolbox3/mMitsuba/blob/master/api/MMitsubaProperty.m#L96).
+
+Here is an example of adding a `toWorld` transformation, with nested translation, to a shape:
+```
+shape = MMitsubaElement('my-shape', 'shape', 'sphere');
+shape.append(MMitsubaProperty.withNested('toWorld', 'transform', 'translate', ...
+  'x', 5, ...
+  'y', -3, ...
+  'z', 1));
+```
+
+This produces the following XML in the output file:
+```
+<shape id="my-shape" type="sphere">
+  <transform name="toWorld">
+    <translate x="5" y="-3" z="1"/>
+  </transform>
+</shape>
 ```
 
 ### Add, Find, and Delete from a Scene
-All your Elements and Containers go in a Scene.  The scene has an "overall" part for things that come before the `WorldBegin` line, like the camera.  The scene also has a "world" part for everything else, inluding shapes, light sources, etc.
+All Elements and Properties go in a top-level `scene` Element.  You can search the Scene (or any Element or Property) for existing nested Elements and Properties.  You can also remove find-and-remove Elements and Properties from the scene.  In one programmer's humble opinion, these abilities make mMitsuba more fun than a plain Mitsuba XML file!
 
-The Scene does more than organize you objects.  You can add objects to the Scene, search the Scene for existing objects, and remove objects from the Scene.  In one programmer's humble opinion, these abilities make mPath more fun than a plain PBRT text file!
-
-Here's an example that adds two elements to a scene.
+Here's an example that adds several elements and properties to a scene:
 ```
-scene = MPbrtScene();
+scene = MMitsubaElement.scene();
 
-% add the camera at the "overall" level
-scene.overall.append(MPbrtElement('Camera', 'type', 'perspective'));
+integrator = MMitsubaElement('integrator', 'integrator', 'path');
+integrator.append(MMitsubaProperty.withValue('maxDepth', 'integer', 8));
+scene.append(integrator);
 
-% add a light to the "world", nested in an Attribute section
-lightAttrib = MPbrtContainer('Attribute');
-scene.world.append(lightAttrib);
-lightAttrib.append(MPbrtElement('LightSource', 'type', 'distant', 'name', 'the-light'));
-```
-
-We can find the camera and update it.
-```
-camera = scene.overall.find('Camera');
-camera.setParameter('fov', 'float', 30);
+sensor = MMitsubaElement('camera', 'sensor', 'perspective');
+sensor.append(MMitsubaProperty.withNested('toWorld', 'transform', 'lookat', ...
+    'origin', 0.1 * [-1 1 4], ...
+    'target', [0 .1 0], ...
+    'up', [0 1 0]));
+sensor.append(MMitsubaProperty.withValue('fov', 'float', 45));
+scene.append(sensor);
 ```
 
-We can find the light and remove it altogether.
+We can find the integrator by `id` and change the type of plugin that it will load:
 ```
-removedlight = scene.world.find('LightSource', 'name', 'the-light', 'remove', true);
-removedLight = 
-  MPbrtElement with properties:
-
-          value: []
-      valueType: ''
-           type: 'distant'
-     parameters: []
-           name: 'the-light'
-     identifier: 'LightSource'
-        comment: ''
-         indent: '  '
-    floatFormat: '%f'
-      intFormat: '%d'
-     scanFormat: '%f'
+integrator = scene.find('integrator');
+integrator.pluginType = 'bdpt';
 ```
 
-Once removed, we can no longer find the light.
+We can find the camera's `fov` Property and remove it altogether:
 ```
-shouldBeEmpty = scene.world.find('LightSource', 'name', 'the-light');
+removedFov = scene.find('fov', ...
+    'type', 'float', ...
+    'remove', true);
+
+removedFov = 
+  MMitsubaProperty with properties:
+
+       data: [1x1 struct]
+         id: 'fov'
+       type: 'float'
+     nested: {}
+    version: '0.5.0'
+```
+
+Once removed, we can no longer find the fov.
+```
+shouldBeEmpty = scene.find('fov', 'type', 'float');
+
 shouldBeEmpty =
      []
 ```
