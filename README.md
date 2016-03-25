@@ -153,4 +153,4 @@ shouldBeEmpty =
      []
 ```
 
-See a similar example script at [examples/addFindRemoveFromScene.m](https://github.com/RenderToolbox3/mPbrt/blob/master/examples/addFindRemoveFromScene.m).
+See a similar example script at [examples/addFindRemoveFromScene.m](https://github.com/RenderToolbox3/mMitsuba/blob/master/examples/addFindRemoveFromScene.m).
