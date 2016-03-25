@@ -76,20 +76,24 @@ This produces the following XML in the output file:
 ```
 
 ### Transformations
-Elements and Containers have the optional properties `name` and `comment`.  When these properties are provided, the objects will print extra comment lines.
+Some elements like shapes, lights, and the camera, can move about the scene as specified by transformations.  We can specify transformations using Properties.  The trick is that transformations can be complex and nested.  So we have a utility methods for making nested Properties: [MMitsubaProperty.withNested()](https://github.com/RenderToolbox3/mMitsuba/blob/master/api/MMitsubaProperty.m#L96).
 
-Here is an example of adding a `name` and `comment` to a coordinate transform:
+Here is an example of adding a `toWorld` translation to a shape:
 ```
-coordXForm = MPbrtElement.transformation('CoordSysTransform', 'camera', ...
-    'name', 'camera-transform', ...
-    'comment', 'Move the coordinate system to match the camera.');
+shape = MMitsubaElement('my-shape', 'shape', 'sphere');
+shape.append(MMitsubaProperty.withNested('toWorld', 'transform', 'translate', ...
+  'x', 5, ...
+  'y', -3, ...
+  'z', 1));
 ```
 
-This produces the following PBRT syntax in the output file:
+This produces the following XML in the output file:
 ```
-# camera-transform
-# Move the coordinate system to match the camera.
-CoordSysTransform "camera"   
+<shape id="my-shape" type="sphere">
+  <transform name="toWorld">
+    <translate x="5" y="-3" z="1"/>
+  </transform>
+</shape>
 ```
 
 ### Add, Find, and Delete from a Scene
