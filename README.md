@@ -37,7 +37,7 @@ This produces the following XML in the output file:
 ### Nesting Elements
 By itself, the sphere shape above would not be very useful.  But Elements can be nested to make them more interesting.
 
-Here is an example of nesting a reflectance function within a shape.  This would give the shape an interesting surface reflectance and appearance:
+Here is an example of nesting a reflectance model within a shape.  This would give the shape an interesting surface appearance:
 ```
 shape = MMitsubaElement('my-shape', 'shape', 'sphere');
 bsdf = MMitsubaElement('my-material', 'bsdf', 'roughdielectric');
