@@ -22,7 +22,7 @@ Elements are things like shapes, light sources, the camera, etc.  In terms of sc
 
 Each Element requires a unique `id`, which lets us find it while were working, and lets elements in the scene file refer to each other.
 
-Each Element also requires a 'type' and a 'pluginType', which tell Mitsuba how to use the Element, and which "plugin" to load into memory. 
+Each Element also requires a `type` and a `pluginType`, which tell Mitsuba how to use the Element, and which "plugin" to load into memory. 
 
 Here is an example of creating a `shape` element:
 ```
