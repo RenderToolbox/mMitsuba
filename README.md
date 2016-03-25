@@ -104,7 +104,7 @@ This produces the following XML in the output file:
 ```
 
 ### Add, Find, and Delete from a Scene
-All Elements and Properties go in a top-level `scene` Element.  You can search the Scene (or any Element or Property) for existing nested Elements and Properties.  You can also remove find-and-remove Elements and Properties from the scene.  In one programmer's humble opinion, these abilities make mMitsuba more fun than a plain Mitsuba XML file!
+All Elements and Properties go in a top-level "scene" Element.  You can search the scene (or any Element or Property) for  nested Elements and Properties.  You can also remove find-and-remove Elements and Properties.  In one programmer's humble opinion, these abilities make mMitsuba more fun than a plain old Mitsuba XML file!
 
 Here's an example that adds several elements and properties to a scene:
 ```
