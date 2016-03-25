@@ -52,7 +52,7 @@ This produces the following XML in the output file:
 ```
 
 ### Properties
-Another way to make elements more interesting is to given them Properties.  Properties are things like "width", "sampleCount", and "roughness".  In terms of scene file syntax, Properties are written as [XML elements](http://www.w3schools.com/xml/xml_elements.asp), just like Elements.  In terms of Mitsuba, properties configure plugins that have already been loaded.
+Another way to make elements more interesting is to given them Properties.  Properties are things like "width", "sampleCount", and "roughness".  In terms of scene file syntax, Properties are also written as [XML elements](http://www.w3schools.com/xml/xml_elements.asp).  In terms of Mitsuba, properties configure plugins that have already been loaded.
 
 Each Property requires a `name`, which must be one of the named parameters expected by a Mitsuba plugin.
 
