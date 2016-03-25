@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<scene version="0.5.0">
+   <shape id="shape" type="sphere">
+      <float name="radius" value="10"/>
+   </shape>
+</scene>

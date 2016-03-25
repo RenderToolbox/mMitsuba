@@ -75,7 +75,7 @@ classdef mMitsubaProperty < mMitsubaNode
             p.setData('value', value);
         end
         
-        function p = withNamedData(name, type, varargin)
+        function p = withData(name, type, varargin)
             % Build a property with name, type, and arbitrary data fields.
             %   Requires name and type as first two arguments.  Subsequent
             %   arguments are treated as name-value pairs to add as named
@@ -93,12 +93,24 @@ classdef mMitsubaProperty < mMitsubaNode
             p.data = parser.Unmatched;
         end
         
-        function p = anonymous(type, varargin)
-            % Build a property with only type, and arbitrary data fields.
-            %   Requires type as the first argument.  Subsequent
-            %   arguments are treated as name-value pairs to add as named
-            %   property data.
-            p = mMitsubaProperty.withNamedData('', type, varargin{:});
+        function p = withNested(name, type, nestedType, varargin)
+            % Build a property that contains a nested anonymous property.
+            %   Builds a property with the given name and type and nests
+            %   inside it a nameless property with the given nestedType and
+            %   subsequent name-value data pairs.
+            %
+            %   This is handy for building transformations.  For example
+            %   withNested('toWorld', 'transform', 'translate', ...
+            %     'x', 5, ...
+            %     'y', -3, ...
+            %     'z', -1);
+            %   produces XML like this:
+            %	  <transform name="toWorld">
+            %       <translate x="5" y="-3" z="1"/>
+            %     </transform>
+            
+            p = mMitsubaProperty(name, type);
+            p.append(mMitsubaProperty.withData('', nestedType, varargin{:}));
         end
     end
 end

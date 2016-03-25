@@ -1,0 +1,39 @@
+2016-03-25 13:26:13 INFO  main [mitsuba.cpp:275] Mitsuba version 0.5.0 (Linux, 64 bit), Copyright (c) 2014 Wenzel Jakob
+2016-03-25 13:26:13 INFO  main [mitsuba.cpp:377] Parsing scene description from "moreComplexExample.xml" ..
+2016-03-25 13:26:13 INFO  main [PluginManager] Loading plugin "plugins/path.so" ..
+2016-03-25 13:26:13 INFO  main [PluginManager] Loading plugin "plugins/perspective.so" ..
+2016-03-25 13:26:13 INFO  main [PluginManager] Loading plugin "plugins/hdrfilm.so" ..
+2016-03-25 13:26:13 INFO  main [PluginManager] Loading plugin "plugins/gaussian.so" ..
+2016-03-25 13:26:13 INFO  main [PluginManager] Loading plugin "plugins/independent.so" ..
+2016-03-25 13:26:13 INFO  main [PluginManager] Loading plugin "plugins/ply.so" ..
+2016-03-25 13:26:13 INFO  main [PLYLoader] Loading geometry from "dragon_vrip_res4.ply" ..
+2016-03-25 13:26:13 INFO  main [PLYLoader] "dragon_vrip_res4": Loaded 11102 triangles, 5205 vertices (191.1 KiB in 22 ms).
+2016-03-25 13:26:13 INFO  main [PluginManager] Loading plugin "plugins/diffuse.so" ..
+2016-03-25 13:26:13 WARN  main [TriMesh] "dragon_vrip_res4": Unable to generate 29 vertex normals
+2016-03-25 13:26:13 INFO  main [PluginManager] Loading plugin "plugins/area.so" ..
+2016-03-25 13:26:13 INFO  main [PluginManager] Loading plugin "plugins/sphere.so" ..
+2016-03-25 13:26:13 INFO  ren0 [KDTreeBase] Constructing a SAH kd-tree (11103 primitives) ..
+2016-03-25 13:26:13 INFO  ren0 [KDTreeBase] Finished -- took 86 ms.
+2016-03-25 13:26:13 INFO  ren0 [SamplingIntegrator] Starting render job (768x576, 4 samples, 4 cores, SSE2 enabled) ..
+2016-03-25 13:26:14 INFO  ren0 [RenderJob] Render time: 0.6840s
+2016-03-25 13:26:14 INFO  ren0 [HDRFilm] Writing image to "/home/ben/render/mMitsuba/examples/moreComplexExample.exr" ..
+2016-03-25 13:26:14 INFO  main [statistics.cpp:142] Statistics:
+------------------------------------------------------------
+ * Loaded plugins :
+    -  plugins/area.so [Area light]
+    -  plugins/diffuse.so [Smooth diffuse BRDF]
+    -  plugins/gaussian.so [Gaussian reconstruction filter]
+    -  plugins/hdrfilm.so [High dynamic range film]
+    -  plugins/independent.so [Independent sampler]
+    -  plugins/path.so [MI path tracer]
+    -  plugins/perspective.so [Perspective camera]
+    -  plugins/ply.so [PLY mesh loader]
+    -  plugins/sphere.so [Sphere intersection primitive]
+
+  * General :
+    -  Normal rays traced : 2.206 M
+    -  Shadow rays traced : 225.377 K
+
+  * Path tracer :
+    -  Average path length : 1.07 (1.89 M / 1.77 M)
+------------------------------------------------------------
