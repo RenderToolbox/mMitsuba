@@ -20,7 +20,7 @@ In general, you create objects and specify their ids, types, values, etc.  Then 
 ### Elements
 Elements are things like shapes, light sources, the camera, etc.  In terms of scene file syntax, Elements are written as [XML elements](http://www.w3schools.com/xml/xml_elements.asp).  In terms of Mitsuba, each Element invokes a Mitsuba "plugin" which is a chunk of the renderer.
 
-Each Element requires a unique `id`, which can be anything you want.  The `id` lets us find Elements while were working, and lets elements refer to each other.
+Each Element requires a unique `id`, which can be anything you want.  The `id` lets us find Elements while were working, and lets Elements refer to each other.
 
 Each Element also requires a `type` and a `pluginType`, which tell Mitsuba how to use the Element, and which "plugin" to load into memory. 
 
