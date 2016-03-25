@@ -76,9 +76,11 @@ This produces the following XML in the output file:
 ```
 
 ### Transformations
-Some elements like shapes, lights, and the camera, can move about the scene as specified by transformations.  We can specify transformations using Properties.  The trick is that transformations can be complex and nested.  So we have a utility methods for making nested Properties: [MMitsubaProperty.withNested()](https://github.com/RenderToolbox3/mMitsuba/blob/master/api/MMitsubaProperty.m#L96).
+Some elements like shapes, lights, and the camera, can move about the scene as specified by spatial transformations.  We can specify transformations using Properties
 
-Here is an example of adding a `toWorld` translation to a shape:
+The trick is that transformations can have multiple nested parts, so we have a utility method for making nested Properties: [MMitsubaProperty.withNested()](https://github.com/RenderToolbox3/mMitsuba/blob/master/api/MMitsubaProperty.m#L96).
+
+Here is an example of adding a `toWorld` transformation, with nested translation, to a shape:
 ```
 shape = MMitsubaElement('my-shape', 'shape', 'sphere');
 shape.append(MMitsubaProperty.withNested('toWorld', 'transform', 'translate', ...
