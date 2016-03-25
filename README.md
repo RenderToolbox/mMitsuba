@@ -13,7 +13,7 @@ See the example scripts at [examples/simpleScene.m](https://github.com/RenderToo
 These examples reproduce scenes from section 6 of the [Mitsuba documentation](https://www.mitsuba-renderer.org/docs.html) (version 0.5.0). 
 
 # The API
-The mMitsuba API is based on a Elements and Properties.  These are written as Matlab [Classes](http://www.mathworks.com/help/matlab/object-oriented-programming.html).
+The mMitsuba API is based on Elements and Properties.  These are written as Matlab [Classes](http://www.mathworks.com/help/matlab/object-oriented-programming.html).
 
 In general, you create objects and specify their names, types, values, etc.  Then the objects take care of writing well-formatted Mitsuba syntax to an XML file.
 
