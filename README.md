@@ -81,7 +81,7 @@ This produces the following XML in the output file:
 ```
 
 ### Transformations
-Some elements like shapes, lights, and the camera, can move about the scene as specified by spatial transformations.  We can specify transformations using Properties.
+Some elements, like shapes, lights, and the camera, can be positioned about the scene by specifying spatial transformations.  mMitsuba treats transformations as Properties.
 
 The trick is that transformations can have multiple nested parts, so we have a utility method for making nested Properties: [MMitsubaProperty.withNested()](https://github.com/RenderToolbox3/mMitsuba/blob/master/api/MMitsubaProperty.m#L96).
 
