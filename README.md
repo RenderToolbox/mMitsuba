@@ -13,35 +13,43 @@ See the example scripts at [examples/simpleScene.m](https://github.com/RenderToo
 These examples reproduces scenes from section 6 of the [Mitsuba documentation](https://www.mitsuba-renderer.org/docs.html) (version 0.5.0). 
 
 # The API
-The mPbrt API is based on a Scene which contains Elements and Containers.  These are written as Matlab [Classes](http://www.mathworks.com/help/matlab/object-oriented-programming.html).
+The mMitsuba API is based on a Elements and Properties.  These are written as Matlab [Classes](http://www.mathworks.com/help/matlab/object-oriented-programming.html).
 
-In general, you create objects and specify their names, types, values, etc.  Then the objects take care of writing well-formatted PBRT syntax to a text file.
+In general, you create objects and specify their names, types, values, etc.  Then the objects take care of writing well-formatted Mitsuba syntax to an XML file.
 
 ### Elements
-Elements are things like shapes, light sources, the camera, etc.  Each one has a declaration line followed by zero or more parameter lines.
+Elements are things like shapes, light sources, the camera, etc.  In terms of scene file syntax, Elements are written as [XML elements](http://www.w3schools.com/xml/xml_elements.asp).  In terms of Mitsuba, each Element invokes a Mitsuba "plugin" which is a chunk of the renderer.
 
-Here is an example of creating a `LightSource` element:
-```
-lightSource = MPbrtElement('LightSource', 'type', 'distant');
-lightSource.setParameter('from', 'point', [0 0 0]);
-lightSource.setParameter('to', 'point', [0 0 1]);
-lightSource.setParameter('L', 'rgb', [3 3 3]);
-```
+Each Element requires a unique `id`, which lets us find it while were working, and lets elements in the scene file refer to each other.
 
-This produces the following PBRT syntax in the output file:
+Each Element also requires a 'type' and a 'pluginType', which tell Mitsuba how to use the Element, and which "plugin" to load into memory. 
+
+Here is an example of creating a `shape` element:
 ```
-LightSource "distant"   
-  "point from" [0 0 0] 
-  "point to" [0 0 1] 
-  "rgb L" [3 3 3] 
+shape = MMitsubaElement('my-shape', 'shape', 'sphere');
 ```
 
-You can write generic Elements as in this example.  There are also utility methods for creating some common or complex elements.  These include:
-  * [`MPbrtElement.comment()`](https://github.com/RenderToolbox3/mPbrt/blob/master/api/MPbrtElement.m#L128)
-  * [`MPbrtElement.transformation()`](https://github.com/RenderToolbox3/mPbrt/blob/master/api/MPbrtElement.m#L133)
-  * [`MPbrtElement.texture()`](https://github.com/RenderToolbox3/mPbrt/blob/master/api/MPbrtElement.m#L148)
-  * [`MPbrtElement.makeNamedMaterial()`](https://github.com/RenderToolbox3/mPbrt/blob/master/api/MPbrtElement.m#L157)
-  * [`MPbrtElement.namedMaterial()`](https://github.com/RenderToolbox3/mPbrt/blob/master/api/MPbrtElement.m#L165)
+This produces the following XML in the output file:
+```
+<shape id="my-shape" type="sphere" />
+```
+
+### Nesting Elements
+By itself, the sphere shape above would not be very useful.  But Elements can be nested to make them more interesting.
+
+Here is an example of nesting a reflectance function within a shape.  This would give the shape an interesting surface reflectance and appearance:
+```
+shape = MMitsubaElement('my-shape', 'shape', 'sphere');
+bsdf = MMitsubaElement('my-material', 'bsdf', 'roughdielectric');
+shape.append(bsdf);
+```
+
+This produces the following XML in the output file:
+```
+<shape id="my-shape" type="sphere">
+  <bsdf id="my-material" type="roughdielectric" />
+</shape>
+```
 
 ### Containers
 Containers are holders for nested elements.  For example the stuff that goes between `WorldBegin` and `WorldEnd` goes in a "World" container.  Likewise, stuff you want to put in an `AttributeBegin`/`AttributeEnd` section would go in an "Attribute" container, and so on for other `Begin`/`End` sections.
