@@ -54,7 +54,8 @@ classdef MMitsubaElement < MMitsubaNode
             %   hack so that callers can treat spectrum strings ('400:1
             %   410:1 420:2 ...') and spectrum file names
             %   ('my-spectrum.spd') interchangeably.
-            property = self.find(name);
+            property = self.find(name, ...
+                'type', type);
             
             if ischar(value) ...
                     && ~strcmp('string', type) ...
