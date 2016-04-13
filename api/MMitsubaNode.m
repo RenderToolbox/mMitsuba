@@ -1,4 +1,4 @@
-classdef MMitsubaNode < handle
+classdef MMitsubaNode < matlab.mixin.Copyable
     % Common interface and utiltiies for things that print themselves to a Mitsuba file.
     
     properties
@@ -111,7 +111,8 @@ classdef MMitsubaNode < handle
             remove = parser.Results.remove;
             
             % is it this container?
-            if strcmp(self.id, id) && (isempty(nodeType) || strcmp(self.type, nodeType))
+            if (isempty(id) || ~isempty(strfind(self.id, id))) ...
+                    && (isempty(nodeType) || strcmp(self.type, nodeType))
                 existing = self;
                 return;
             end
@@ -121,7 +122,8 @@ classdef MMitsubaNode < handle
                 node = self.nested{nn};
                 
                 % look for a direct child [and remove it]
-                if strcmp(node.id, id) && (isempty(nodeType) || strcmp(node.type, nodeType))
+                if (isempty(id) || ~isempty(strfind(node.id, id))) ...
+                        && (isempty(nodeType) || strcmp(node.type, nodeType))
                     existing = node;
                     if remove
                         self.nested(nn) = [];
@@ -138,6 +140,17 @@ classdef MMitsubaNode < handle
             
             % never found a match
             existing = [];
+        end
+    end
+    
+    methods (Access = protected)
+        function copy = copyElement(self)
+            % Override from matlab.mixin.Copyable.
+            %   Make a recursive "deep" copy of nested objects.
+            copy = self.copyElement@matlab.mixin.Copyable();
+            for nn = 1:numel(copy.nested)
+                copy.nested{nn} = copy.nested{nn}.copyElement();
+            end
         end
     end
     
