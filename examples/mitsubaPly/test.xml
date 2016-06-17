@@ -1,0 +1,18 @@
+<?xml  version="1.0"  encoding="utf-8"?>
+<scene  version="0.5.0">
+  <shape  type="ply">
+    <string  name="filename" value="mySquare.ply"/>
+
+    <boolean name="faceNormals" value="false" />
+    <boolean name="flipNormals" value="false" />
+
+    <transform  name="toWorld">
+      <rotate  x="1" y="1" z="1" angle="45"/>
+    </transform>
+
+    <bsdf  type="diffuse">
+      <texture  type="vertexcolors"  name="reflectance"/>
+    </bsdf>
+  </shape>
+</scene>
+

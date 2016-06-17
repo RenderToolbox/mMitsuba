@@ -18,11 +18,10 @@
 clear;
 clc;
 
-pathHere = fileparts(which('mexximpImportExample'));
+sourceFile = which('millenium-falcon.obj');
 outputFolder = fullfile(tempdir(), 'mexximpImportExample');
 
 %% Load the 3D scene.
-sourceFile = fullfile(pathHere, 'falcon', 'millenium-falcon.obj');
 mexximpScene = mexximpCleanImport(sourceFile);
 
 % add missing camera and lights
@@ -47,7 +46,7 @@ mitsubaScene.printToFile(sceneFile);
 %% Try to render with Mitsuba.
 
 % locate a mitsuba executable?
-%mitsuba = '~/render/mitsuba/mitsuba-rgb/mitsuba';
+%mitsuba = '/home/ben/render/mitsuba/mitsuba-rgb/mitsuba';
 [status, mitsuba] = system('which mitsuba');
 if isempty(mitsuba)
     disp('Mitsuba renderer not found.');

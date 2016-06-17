@@ -1,0 +1,24 @@
+ply
+format ascii 1.0
+element vertex 4
+property float32 x
+property float32 y
+property float32 z
+property float32 nx
+property float32 ny
+property float32 nz
+property float32 u
+property float32 v
+property float32 red
+property float32 green
+property float32 blue
+element face 2
+property list uint32 uint32 vertex_index
+end_header
+0.000000 0.000000 0.000000	-1.000000 -1.000000 -1.000000	0.000000 0.000000	1.000000 0.000000 0.000000
+0.000000 0.000000 1.000000	-1.000000 -1.000000 -1.000000	0.000000 1.000000	0.000000 1.000000 0.000000
+0.000000 1.000000 1.000000	-1.000000 -1.000000 -1.000000	1.000000 1.000000	0.000000 0.000000 1.000000
+0.000000 1.000000 0.000000	-1.000000 -1.000000 -1.000000	1.000000 0.000000	0.500000 0.500000 0.500000
+3 0 1 3
+3 1 2 3
+
