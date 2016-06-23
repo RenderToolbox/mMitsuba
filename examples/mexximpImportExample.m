@@ -52,6 +52,7 @@ if isempty(mitsuba)
     disp('Mitsuba renderer not found.');
     return;
 end
+mitsuba = regexprep(mitsuba, '[\r\n]*', '');
 
 % render
 imageFile = fullfile(outputFolder, 'milleniumFalcon.m');
