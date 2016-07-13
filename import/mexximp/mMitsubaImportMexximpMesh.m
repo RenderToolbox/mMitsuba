@@ -76,19 +76,19 @@ faces = cat(1, data.faces.indices)';
 plyArgs = {};
 
 if ~isempty(data.normals)
-    plyArgs = cat(2, {'normals', data.normals});
+    plyArgs = cat(2, plyArgs, {'normals', data.normals});
 end
 
 if ~isempty(data.textureCoordinates0)
     % only use the first set of texture coordinates
     % always assume 2 uv components (no uvw)
     uvs = data.textureCoordinates0(1:2, :);
-    plyArgs = cat(2, {'uvs', uvs});
+    plyArgs = cat(2, plyArgs, {'uvs', uvs});
 end
 
 if ~isempty(data.colors0)
     rgbs = data.colors0(1:3, :);
-    plyArgs = cat(2, {'colors', rgbs});
+    plyArgs = cat(2, plyArgs, {'colors', rgbs});
 end
 
 
