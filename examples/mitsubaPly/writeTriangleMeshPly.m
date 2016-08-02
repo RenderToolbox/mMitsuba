@@ -115,7 +115,11 @@ try
     if isnumeric(outputFile)
         fid = outputFile;
     else
-        fid = fopen(outputFile, 'w', 'ieee-le', 'UTF-8');
+        if strcmp(format, 'binary_big_endian');
+            fid = fopen(outputFile, 'w', 'ieee-be', 'UTF-8');
+        else
+            fid = fopen(outputFile, 'w', 'ieee-le', 'UTF-8');
+        end
     end
     
     % go write the file

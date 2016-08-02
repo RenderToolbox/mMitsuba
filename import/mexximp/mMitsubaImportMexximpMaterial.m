@@ -29,8 +29,6 @@ function mitsubaNode = mMitsubaImportMexximpMaterial(scene, material, varargin)
 % Returns an MMitsubaNode with type 'bsdf' and parameters
 % filled in based on mexximp material properties.
 %
-% mitsubaNode = mMitsubaImportMexximpMaterial(scene, material, varargin)
-%
 % Copyright (c) 2016 mexximp Team
 
 parser = inputParser();
@@ -65,7 +63,7 @@ mitsubaNode.id = mitsubaId;
 
 diffuseNode = mitsubaNode.find(materialDiffuseParameter);
 if ~isempty(materialDiffuseParameter) && ~isempty(diffuseNode)
-    if ~isempty(diffuseTexture)
+    if ~isempty(diffuseTexture) && ischar(diffuseTexture)
         diffuseNode.type = 'texture';
         diffuseNode.data = struct('type', 'bitmap');
         diffuseNode.append(MMitsubaProperty.withValue('filename', 'string', diffuseTexture));
@@ -77,7 +75,7 @@ end
 
 specularNode = mitsubaNode.find(materialSpecularParameter);
 if ~isempty(materialSpecularParameter) && ~isempty(specularNode)
-    if ~isempty(specularTexture)
+    if ~isempty(specularTexture) && ischar(specularTexture)
         specularNode.type = 'texture';
         specularNode.data = struct('type', 'bitmap');
         specularNode.append(MMitsubaProperty.withValue('filename', 'string', specularTexture));
