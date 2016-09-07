@@ -1,3 +1,4 @@
+
 classdef MMitsubaNode < matlab.mixin.Copyable
     % Common interface and utiltiies for things that print themselves to a Mitsuba file.
     
@@ -111,7 +112,7 @@ classdef MMitsubaNode < matlab.mixin.Copyable
             remove = parser.Results.remove;
             
             % is it this container?
-            if (isempty(id) || ~isempty(strfind(self.id, id))) ...
+            if (isempty(id) || ~isempty(regexp(self.id, id, 'once'))) ...
                     && (isempty(nodeType) || strcmp(self.type, nodeType))
                 existing = self;
                 return;
@@ -122,7 +123,7 @@ classdef MMitsubaNode < matlab.mixin.Copyable
                 node = self.nested{nn};
                 
                 % look for a direct child [and remove it]
-                if (isempty(id) || ~isempty(strfind(node.id, id))) ...
+                if (isempty(id) || ~isempty(regexp(node.id, id,'once'))) ...
                         && (isempty(nodeType) || strcmp(node.type, nodeType))
                     existing = node;
                     if remove
