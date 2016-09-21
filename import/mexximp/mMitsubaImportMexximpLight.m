@@ -62,6 +62,10 @@ switch internal.type
         innerAngle = internal.innerConeAngle * 180 / pi();
         mitsubaNode.append(MMitsubaProperty.withValue('beamWidth', 'float', innerAngle));
         mitsubaNode.append(MMitsubaProperty.withValue('cutoffAngle', 'float', outerAngle));
+        
+    otherwise
+        mitsubaNode = MMitsubaElement(mitsubaId, 'emitter', 'point');
+        mitsubaNode.append(MMitsubaProperty.withValue('intensity', 'rgb', internal.diffuseColor'));
 end
 
 %% Add the inner orientation and world transformation.
