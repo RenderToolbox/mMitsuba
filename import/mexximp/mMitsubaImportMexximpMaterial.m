@@ -85,6 +85,10 @@ if ~isempty(materialSpecularParameter) && ~isempty(specularNode)
     end
 end
 
+%% Record the Mexximp element that produced this node.
+mitsubaNode.extra = material;
+
+
 %% Query a material property, return default if no good match.
 function result = queryProperties(properties, queryField, queryValue, resultField, defaultResult)
 query = {queryField, mexximpStringMatcher(queryValue)};

@@ -82,3 +82,6 @@ sampler = MMitsubaElement('sampler', 'sampler', 'ldsampler');
 sampler.append(MMitsubaProperty.withValue('sampleCount', 'integer', 8));
 mitsubaNode.append(sampler);
 
+%% Record the Mexximp element that produced this node.
+mitsubaNode.extra = camera;
+

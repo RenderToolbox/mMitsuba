@@ -57,4 +57,7 @@ for oo = 1:nObjects
     nodeTransform = data.transformation;
     shape.append(MMitsubaProperty.withNested('toWorld', 'transform', 'matrix', ...
         'value', nodeTransform(:)'));
+    
+    % mexximp element that led to this shape
+    shape.extra = node;
 end

@@ -14,6 +14,9 @@ classdef MMitsubaNode < matlab.mixin.Copyable
         
         % Mitsuba version to target.
         version = '0.5.0';
+        
+        % any extra data to associate with this node
+        extra;
     end
     
     methods (Abstract)

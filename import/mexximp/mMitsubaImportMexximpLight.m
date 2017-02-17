@@ -76,3 +76,7 @@ toWorld.append(MMitsubaProperty.withData('', 'lookat', ...
     'up', [0 1 0]));
 toWorld.append(MMitsubaProperty.withValue('', 'matrix', externalTransform(:)'));
 mitsubaNode.append(toWorld);
+
+%% Record the Mexximp element that produced this node.
+mitsubaNode.extra = light;
+
