@@ -73,6 +73,18 @@ classdef MMitsubaElement < MMitsubaNode
                 return;
             end
             
+            % We don't want to end up with two fields in data, one a
+            % value and one a filename -- we can have only one.  So, if
+            % there already is something there, we clear it before
+            % adding in below what we are supposed to be adding here.
+            if isfield(property.data,'value')
+                property.data = rmfield(property.data,'value');
+            end
+            if isfield(property.data,'filename')
+                property.data = rmfield(property.data,'filename');
+            end
+            
+            % Then do the adding in.
             property.setData(attributeName, value);
             property.type = type;
         end
